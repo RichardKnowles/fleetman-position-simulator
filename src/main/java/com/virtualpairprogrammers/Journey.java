@@ -31,27 +31,31 @@ public class Journey implements Callable<Object>
 	@Override
 	public Object call() throws InterruptedException  
 	{
-		for (String nextReport: this.positions)
+		while(true)
 		{
-			String[] data = nextReport.split("\"");
-			String lat = data[1];
-			String longitude = data[3];
-
-			// Spring will convert a HashMap into a MapMessage using the default MessageConverter.
-			HashMap<String,String> positionMessage = new HashMap<>();
-			positionMessage.put("vehicle", vehicleName);
-			positionMessage.put("lat", lat);
-			positionMessage.put("long", longitude);
-			positionMessage.put("time", new java.util.Date().toString());
-
-			sendToQueue(positionMessage);
-
-			// We have an element of randomness to help the queue be nicely 
-			// distributed
-			delay(Math.random() * 200 + 200);
+			for (String nextReport: this.positions)
+			{
+				// To speed the vehicles up, we're going to drop some reports
+				if (Math.random() < 0.5) continue;
+				
+				String[] data = nextReport.split("\"");
+				String lat = data[1];
+				String longitude = data[3];
+	
+				// Spring will convert a HashMap into a MapMessage using the default MessageConverter.
+				HashMap<String,String> positionMessage = new HashMap<>();
+				positionMessage.put("vehicle", vehicleName);
+				positionMessage.put("lat", lat);
+				positionMessage.put("long", longitude);
+				positionMessage.put("time", new java.util.Date().toString());
+	
+				sendToQueue(positionMessage);
+	
+				// We have an element of randomness to help the queue be nicely 
+				// distributed
+				delay(Math.random() * 10 + 20);
+			}
 		}
-		System.out.println(vehicleName + " has now completed its journey. Having a tea break.");
-		return null;
 	}
 
 	/**

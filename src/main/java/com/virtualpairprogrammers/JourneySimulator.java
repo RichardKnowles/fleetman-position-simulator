@@ -74,10 +74,6 @@ public class JourneySimulator implements Runnable {
 				stillRunning = false;
 				System.out.println("Asked to finish!");
 			}
-			else
-			{
-				System.out.println("All journeys complete - starting again");
-			}
 		}
 	}
 
