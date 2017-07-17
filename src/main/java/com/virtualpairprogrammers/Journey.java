@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import org.apache.log4j.Logger;
 import org.springframework.jms.UncategorizedJmsException;
 import org.springframework.jms.core.JmsTemplate;
 
@@ -19,6 +20,8 @@ public class Journey implements Callable<Object>
 	private String vehicleName;
 	private JmsTemplate jmsTemplate;
 	private String queueName;
+	
+	private static Logger log  = Logger.getLogger(Journey.class);
 
 	public Journey(String vehicleName, List<String> positions, JmsTemplate jmsTemplate, String queueName) 
 	{
@@ -53,7 +56,7 @@ public class Journey implements Callable<Object>
 	
 				// We have an element of randomness to help the queue be nicely 
 				// distributed
-				delay(Math.random() * 10 + 20);
+				delay(Math.random() * 1000 + 2000);
 			}
 		}
 	}
@@ -77,13 +80,14 @@ public class Journey implements Callable<Object>
 			catch (UncategorizedJmsException e)
 			{
 				// we are going to assume that this is due to downtime - back off and go again
-				System.out.println("Queue unavailable - backing off 5000ms before retry");
+				log.warn("Queue unavailable - backing off 5000ms before retry");
 				delay(5000);
 			}
 		}
 	}
 
 	private static void delay(double d) throws InterruptedException {
+		log.debug("Sleeping for " + d + " millsecs");
 		Thread.sleep((long) d);
 	}
 

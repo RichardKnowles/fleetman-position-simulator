@@ -30,14 +30,6 @@ public class PositionsimulatorApplication {
 
 			Thread mainThread = new Thread(simulator);
 			mainThread.start();
-
-			System.out.println("Press return to terminate the simulation.");
-			Scanner sc = new Scanner(System.in);
-			sc.nextLine();
-			sc.close();
-
-			// try with resources will automatically close the container.
-			simulator.finish();
 		}
 		
 	}
