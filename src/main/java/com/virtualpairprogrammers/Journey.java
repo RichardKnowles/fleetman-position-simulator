@@ -56,7 +56,7 @@ public class Journey implements Callable<Object>
 	
 				// We have an element of randomness to help the queue be nicely 
 				// distributed
-				delay(Math.random() * 1000 + 2000);
+				delay(Math.random() * 10000 + 2000);
 			}
 		}
 	}
